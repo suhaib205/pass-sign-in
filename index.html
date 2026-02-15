@@ -3,377 +3,372 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pass Your License - Sign In</title>
+    <title>Pass Your License - Full App Design</title>
     <!-- Google Fonts: Plus Jakarta Sans for a modern, geometric look -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         /* --- Reset & Base Styles --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary-color: #0ea5e9;
+            --secondary-color: #38bdf8;
+            --accent-color: #6366f1;
+            --bg-dark: #020617;
+            --card-bg: rgba(15, 23, 42, 0.6);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-muted: #94a3b8;
         }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #020617; /* Very Dark Navy */
+            background-color: var(--bg-dark);
             color: #ffffff;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
+            min-height: 100vh;
+            overflow-x: hidden;
             position: relative;
         }
 
-        /* --- Background Effects (The "High-End" Feel) --- */
-        
-        /* 1. The subtle medical watermark pattern */
+        /* --- Global Background Effects --- */
         .bg-pattern {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: radial-gradient(#1e293b 1px, transparent 1px);
-            background-size: 30px 30px;
-            opacity: 0.1;
-            z-index: 0;
+            background-size: 30px 30px; opacity: 0.1; z-index: -2;
         }
 
-        /* 2. Ambient Glow Orbs (Lighting) */
         .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: 1;
-            opacity: 0.4;
+            position: fixed; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.4;
             animation: float 10s infinite ease-in-out;
         }
-
-        .orb-1 {
-            width: 300px;
-            height: 300px;
-            background: #0ea5e9; /* Sky Blue */
-            top: -50px;
-            left: -50px;
-        }
-
-        .orb-2 {
-            width: 400px;
-            height: 400px;
-            background: #2563eb; /* Darker Blue */
-            bottom: -100px;
-            right: -100px;
-            animation-delay: -5s;
-        }
-
-        /* 3. Floating Medical Icons (Watermark) */
-        .medical-icon-bg {
-            position: absolute;
-            color: #38bdf8;
-            opacity: 0.03; /* Very subtle */
-            z-index: 0;
-            font-size: 8rem;
-            pointer-events: none;
-        }
-
-        .icon-pos-1 { top: 10%; left: 10%; transform: rotate(-15deg); }
-        .icon-pos-2 { bottom: 15%; right: 10%; transform: rotate(15deg); }
-        .icon-pos-3 { top: 40%; right: 20%; font-size: 4rem; opacity: 0.02; }
+        .orb-1 { width: 400px; height: 400px; background: var(--primary-color); top: -100px; left: -100px; }
+        .orb-2 { width: 500px; height: 500px; background: #2563eb; bottom: -150px; right: -150px; animation-delay: -5s; }
+        .orb-3 { width: 300px; height: 300px; background: var(--accent-color); top: 40%; left: 30%; opacity: 0.2; filter: blur(100px); }
 
         @keyframes float {
             0%, 100% { transform: translate(0, 0); }
             50% { transform: translate(20px, 40px); }
         }
 
-        /* --- Login Card (Glassmorphism) --- */
-        .login-card {
-            position: relative;
-            z-index: 10;
-            background: rgba(15, 23, 42, 0.6); /* Semi-transparent Slate */
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-top: 1px solid rgba(255, 255, 255, 0.15); /* Highlight top border */
-            padding: 3rem 2.5rem;
-            border-radius: 24px;
-            width: 100%;
-            max-width: 420px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            margin: 1rem;
-            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        /* --- Layout & Utilities --- */
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        @keyframes slideUp {
+        .hidden { display: none !important; }
+        .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- Header Section --- */
-        .header {
-            text-align: center;
-            margin-bottom: 2.5rem;
+        /* --- GLASSMORPHISM CARD (Shared Class) --- */
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        .logo-container {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 1rem;
+        /* --- VIEW 1: LOGIN PAGE --- */
+        .login-view {
+            display: flex; justify-content: center; align-items: center; height: 100%;
         }
+        .login-card-content { padding: 3rem 2.5rem; width: 100%; max-width: 420px; }
+        
+        .logo-container { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 2rem; }
+        .logo-icon { font-size: 2rem; color: var(--secondary-color); filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.5)); animation: pulse 2s infinite; }
+        .logo-text { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.5px; }
 
-        .logo-icon {
-            font-size: 2rem;
-            color: #38bdf8; /* Light Blue */
-            filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.5)); /* Logo Glow */
-            animation: pulse-heart 2s infinite;
-        }
-
-        @keyframes pulse-heart {
-            0% { transform: scale(1); }
-            15% { transform: scale(1.1); }
-            30% { transform: scale(1); }
-            100% { transform: scale(1); }
-        }
-
-        .logo-text {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #fff;
-            letter-spacing: -0.5px;
-        }
-
-        .welcome-text {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(to right, #ffffff, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .sub-text {
-            color: #94a3b8;
-            font-size: 0.9rem;
-        }
-
-        /* --- Form Elements --- */
-        .form-group {
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: #cbd5e1;
-            margin-bottom: 0.5rem;
-            margin-left: 4px;
-        }
-
-        .input-wrapper {
-            position: relative;
-        }
-
-        .input-icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #64748b;
-            font-size: 1rem;
-            transition: color 0.3s ease;
-        }
-
+        .form-group { margin-bottom: 1.5rem; }
+        .form-label { display: block; font-size: 0.85rem; color: #cbd5e1; margin-bottom: 0.5rem; margin-left: 4px; }
+        .input-wrapper { position: relative; }
+        .input-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #64748b; transition: 0.3s; }
+        
         .form-input {
-            width: 100%;
-            padding: 14px 16px 14px 44px; /* Left padding for icon */
+            width: 100%; padding: 14px 16px 14px 44px;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: #fff;
-            font-size: 1rem;
-            font-family: inherit;
-            outline: none;
-            transition: all 0.3s ease;
+            border-radius: 12px; color: #fff; outline: none; transition: 0.3s;
         }
+        .form-input:focus { border-color: var(--secondary-color); box-shadow: 0 0 15px rgba(56, 189, 248, 0.15); background: rgba(56, 189, 248, 0.05); }
+        .form-input:focus + .input-icon { color: var(--secondary-color); }
 
-        .form-input::placeholder {
-            color: #475569;
-        }
-
-        /* Input Focus State (Glow Effect) */
-        .form-input:focus {
-            background: rgba(56, 189, 248, 0.05);
-            border-color: #38bdf8;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
-        }
-
-        .form-input:focus + .input-icon {
-            color: #38bdf8;
-        }
-
-        /* --- Button (The Star of the Show) --- */
         .btn-primary {
-            width: 100%;
-            padding: 16px;
-            margin-top: 1rem;
-            background: linear-gradient(135deg, #0ea5e9, #2563eb);
-            color: white;
-            font-size: 1rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            /* The Neon Shadow */
-            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.4); 
+            width: 100%; padding: 16px;
+            background: linear-gradient(135deg, var(--primary-color), #2563eb);
+            color: white; font-weight: 600; border: none; border-radius: 12px; cursor: pointer;
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.4); transition: 0.3s;
+            display: flex; justify-content: center; align-items: center; gap: 8px;
         }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(14, 165, 233, 0.6); }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(14, 165, 233, 0.6);
-            background: linear-gradient(135deg, #38bdf8, #3b82f6);
+        /* --- VIEW 2: DASHBOARD --- */
+        .dashboard-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;
         }
+        .user-welcome h2 { font-size: 1.8rem; margin-bottom: 0.2rem; }
+        .user-welcome span { color: var(--text-muted); font-size: 0.95rem; }
+        .highlight { color: var(--secondary-color); }
+        .avatar { width: 50px; height: 50px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid rgba(255,255,255,0.2); }
 
-        .btn-primary:active {
-            transform: translateY(0);
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;
         }
-
-        /* Button shine effect */
-        .btn-primary::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: 0.5s;
+        .stat-card { padding: 1.5rem; display: flex; align-items: center; gap: 1rem; position: relative; overflow: hidden; }
+        .stat-icon-box {
+            width: 50px; height: 50px; border-radius: 12px; background: rgba(56, 189, 248, 0.1);
+            display: flex; align-items: center; justify-content: center; color: var(--secondary-color); font-size: 1.2rem;
         }
+        .stat-info h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.2rem; }
+        .stat-info p { color: var(--text-muted); font-size: 0.85rem; }
 
-        .btn-primary:hover::after {
-            left: 100%;
+        .main-action-section {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(99, 102, 241, 0.1));
+            border: 1px solid rgba(56, 189, 248, 0.2); padding: 2rem; border-radius: 20px;
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;
         }
+        .progress-circle { width: 80px; height: 80px; position: relative; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: conic-gradient(var(--secondary-color) 75%, rgba(255,255,255,0.1) 0); }
+        .progress-circle::before { content: '75%'; position: absolute; width: 65px; height: 65px; background: #0f172a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
 
-        /* --- Footer Links --- */
-        .footer-links {
-            margin-top: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.8rem;
+        /* --- VIEW 3: QUIZ INTERFACE --- */
+        .quiz-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;
+            padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);
         }
-
-        .link {
-            color: #94a3b8;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s;
-        }
-
-        .link:hover {
-            color: #38bdf8;
-        }
-
-        .signup-text {
-            color: #cbd5e1;
-            font-size: 0.9rem;
-        }
-
-        .signup-link {
-            color: #38bdf8;
-            font-weight: 600;
-            text-decoration: none;
-            margin-left: 5px;
+        .timer-badge {
+            background: rgba(239, 68, 68, 0.15); color: #fca5a5; padding: 6px 12px; border-radius: 20px;
+            font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 6px;
         }
         
-        .signup-link:hover {
-            text-decoration: underline;
-        }
+        .question-box { margin-bottom: 2rem; }
+        .q-number { color: var(--secondary-color); font-weight: 600; margin-bottom: 0.5rem; display: block; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
+        .question-text { font-size: 1.4rem; line-height: 1.5; font-weight: 600; }
 
-        /* Mobile Adjustments */
-        @media (max-width: 480px) {
-            .login-card {
-                padding: 2rem 1.5rem;
-                border-radius: 20px;
-            }
-            .welcome-text {
-                font-size: 1.5rem;
-            }
+        .options-grid { display: grid; gap: 1rem; }
+        .option-btn {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);
+            padding: 1.2rem; border-radius: 12px; text-align: left; color: #e2e8f0; cursor: pointer;
+            transition: all 0.2s ease; display: flex; align-items: center; gap: 1rem;
+        }
+        .option-marker {
+            width: 28px; height: 28px; border-radius: 50%; border: 2px solid #475569;
+            display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: #94a3b8; transition: 0.2s;
+        }
+        
+        /* Interactive States for Quiz */
+        .option-btn:hover { background: rgba(255, 255, 255, 0.06); border-color: #64748b; }
+        .option-btn.selected {
+            background: rgba(56, 189, 248, 0.15); border-color: var(--secondary-color); box-shadow: 0 0 15px rgba(56, 189, 248, 0.1);
+        }
+        .option-btn.selected .option-marker { background: var(--secondary-color); border-color: var(--secondary-color); color: #000; }
+
+        .quiz-footer { margin-top: 2rem; display: flex; justify-content: flex-end; }
+        .btn-outline {
+            background: transparent; border: 1px solid #475569; color: #cbd5e1; padding: 12px 24px; border-radius: 10px; cursor: pointer; transition: 0.3s;
+        }
+        .btn-outline:hover { border-color: #fff; color: #fff; }
+
+        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);} }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .app-container { padding: 1rem; }
+            .login-card-content { padding: 2rem 1.5rem; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .main-action-section { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Background Decoration Elements -->
+    <!-- Background Elements -->
     <div class="bg-pattern"></div>
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
 
-    <!-- Floating Medical Icons (Watermark Effect) -->
-    <i class="fa-solid fa-stethoscope medical-icon-bg icon-pos-1"></i>
-    <i class="fa-solid fa-user-doctor medical-icon-bg icon-pos-2"></i>
-    <i class="fa-solid fa-notes-medical medical-icon-bg icon-pos-3"></i>
-
-    <!-- Main Card -->
-    <div class="login-card">
+    <div class="app-container">
         
-        <!-- Header & Logo -->
-        <div class="header">
-            <div class="logo-container">
-                <i class="fa-solid fa-heart-pulse logo-icon"></i>
-                <span class="logo-text">Pass Your License</span>
+        <!-- === VIEW 1: LOGIN === -->
+        <section id="login-view" class="login-view active fade-in">
+            <div class="glass-card login-card-content">
+                <div class="logo-container">
+                    <i class="fa-solid fa-heart-pulse logo-icon"></i>
+                    <span class="logo-text">Pass Your License</span>
+                </div>
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h1 style="font-size: 1.8rem; margin-bottom: 0.5rem;">Welcome Back</h1>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Sign in to continue your progress.</p>
+                </div>
+                <form onsubmit="event.preventDefault(); navigateTo('dashboard-view');">
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <div class="input-wrapper">
+                            <input type="email" class="form-input" placeholder="nurse@example.com" value="demo@nurse.com">
+                            <i class="fa-regular fa-envelope input-icon"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <div class="input-wrapper">
+                            <input type="password" class="form-input" placeholder="••••••••" value="123456">
+                            <i class="fa-solid fa-lock input-icon"></i>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        Sign In <i class="fa-solid fa-arrow-right" style="font-size: 0.8rem;"></i>
+                    </button>
+                </form>
+                <div style="margin-top: 1.5rem; text-align: center;">
+                    <a href="#" style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none;">Forgot Password?</a>
+                </div>
             </div>
-            <h1 class="welcome-text">Welcome Back</h1>
-            <p class="sub-text">Please enter your details to sign in.</p>
-        </div>
+        </section>
 
-        <!-- Form -->
-        <form action="#" method="POST">
-            <!-- Email Input -->
-            <div class="form-group">
-                <label for="email" class="form-label">Email Address</label>
-                <div class="input-wrapper">
-                    <input type="email" id="email" class="form-input" placeholder="nurse@example.com" required>
-                    <i class="fa-regular fa-envelope input-icon"></i>
+        <!-- === VIEW 2: DASHBOARD === -->
+        <section id="dashboard-view" class="hidden">
+            <!-- Header -->
+            <div class="dashboard-header fade-in">
+                <div class="user-welcome">
+                    <h2>Hello, <span class="highlight">Nurse Sarah</span></h2>
+                    <span>Let's get you ready for the license exam.</span>
+                </div>
+                <div class="avatar">NS</div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid fade-in" style="animation-delay: 0.1s;">
+                <div class="glass-card stat-card">
+                    <div class="stat-icon-box"><i class="fa-solid fa-clipboard-check"></i></div>
+                    <div class="stat-info">
+                        <h3>12</h3>
+                        <p>Quizzes Completed</p>
+                    </div>
+                </div>
+                <div class="glass-card stat-card">
+                    <div class="stat-icon-box" style="color: #4ade80; background: rgba(74, 222, 128, 0.1);"><i class="fa-solid fa-chart-line"></i></div>
+                    <div class="stat-info">
+                        <h3>84%</h3>
+                        <p>Average Score</p>
+                    </div>
+                </div>
+                <div class="glass-card stat-card">
+                    <div class="stat-icon-box" style="color: #f472b6; background: rgba(244, 114, 182, 0.1);"><i class="fa-regular fa-clock"></i></div>
+                    <div class="stat-info">
+                        <h3>18h</h3>
+                        <p>Study Time</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Password Input -->
-            <div class="form-group">
-                <label for="password" class="form-label">Password</label>
-                <div class="input-wrapper">
-                    <input type="password" id="password" class="form-input" placeholder="••••••••" required>
-                    <i class="fa-solid fa-lock input-icon"></i>
+            <!-- Main Action Area -->
+            <div class="glass-card main-action-section fade-in" style="animation-delay: 0.2s;">
+                <div style="flex: 1;">
+                    <h3 style="font-size: 1.4rem; margin-bottom: 0.5rem;">Continue Pediatrics Module</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">You stopped at Question 15. Ready to resume?</p>
+                    <button class="btn-primary" onclick="navigateTo('quiz-view')" style="max-width: 200px;">
+                        Start New Quiz
+                    </button>
+                </div>
+                <div class="progress-circle"></div>
+            </div>
+        </section>
+
+        <!-- === VIEW 3: QUIZ INTERFACE === -->
+        <section id="quiz-view" class="hidden">
+            <div class="glass-card" style="padding: 2rem; max-width: 800px; margin: 0 auto;">
+                
+                <!-- Quiz Header -->
+                <div class="quiz-header">
+                    <button onclick="navigateTo('dashboard-view')" class="btn-outline" style="padding: 8px 16px; border: none; color: var(--text-muted);">
+                        <i class="fa-solid fa-arrow-left"></i> Exit
+                    </button>
+                    <span style="font-weight: 600; color: var(--text-muted);">Cardiology Exam</span>
+                    <div class="timer-badge">
+                        <i class="fa-regular fa-clock"></i> 14:30
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="fade-in">
+                    <div class="question-box">
+                        <span class="q-number">Question 5 of 50</span>
+                        <p class="question-text">
+                            A patient with heart failure is prescribed Furosemide. Which of the following laboratory values should the nurse monitor most closely?
+                        </p>
+                    </div>
+
+                    <div class="options-grid">
+                        <div class="option-btn" onclick="selectOption(this)">
+                            <div class="option-marker">A</div>
+                            <span>Serum Sodium levels</span>
+                        </div>
+                        <div class="option-btn" onclick="selectOption(this)">
+                            <div class="option-marker">B</div>
+                            <span>Serum Potassium levels</span>
+                        </div>
+                        <div class="option-btn" onclick="selectOption(this)">
+                            <div class="option-marker">C</div>
+                            <span>Blood Glucose levels</span>
+                        </div>
+                        <div class="option-btn" onclick="selectOption(this)">
+                            <div class="option-marker">D</div>
+                            <span>Serum Calcium levels</span>
+                        </div>
+                    </div>
+
+                    <div class="quiz-footer">
+                        <button class="btn-primary" style="width: auto; padding-left: 3rem; padding-right: 3rem;">
+                            Next Question
+                        </button>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Submit Button -->
-            <button type="submit" class="btn-primary">
-                Sign In
-            </button>
-
-            <!-- Footer Links -->
-            <div class="footer-links">
-                <a href="#" class="link">Forgot Password?</a>
-                <p class="signup-text">
-                    Don't have an account? 
-                    <a href="#" class="signup-link">Sign up</a>
-                </p>
-            </div>
-        </form>
     </div>
 
+    <!-- Simple JS for Navigation Prototype -->
+    <script>
+        function navigateTo(viewId) {
+            // Hide all sections
+            document.querySelectorAll('section').forEach(sec => {
+                sec.classList.add('hidden');
+                sec.classList.remove('fade-in'); // Reset animation
+            });
+
+            // Show target section
+            const target = document.getElementById(viewId);
+            target.classList.remove('hidden');
+            
+            // Trigger animation reflow
+            void target.offsetWidth; 
+            target.classList.add('fade-in');
+        }
+
+        function selectOption(element) {
+            // Remove selected class from siblings
+            const parent = element.parentElement;
+            Array.from(parent.children).forEach(child => child.classList.remove('selected'));
+            
+            // Add to clicked
+            element.classList.add('selected');
+        }
+    </script>
 </body>
 </html>
