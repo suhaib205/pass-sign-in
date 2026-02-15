@@ -64,9 +64,9 @@
             padding: 1.5rem 0; display: flex; justify-content: space-between; align-items: center;
             position: absolute; top: 0; left: 0; width: 100%; z-index: 50;
         }
-        .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.2rem; color: #fff; text-decoration: none; }
+        .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.2rem; color: #fff; text-decoration: none; cursor: pointer; }
         .brand i { color: var(--primary); font-size: 1.4rem; }
-        .nav-links a { color: var(--text-muted); text-decoration: none; margin-left: 2rem; font-size: 0.95rem; font-weight: 500; transition: color 0.2s; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; margin-left: 2rem; font-size: 0.95rem; font-weight: 500; transition: color 0.2s; cursor: pointer;}
         .nav-links a:hover { color: #fff; }
 
         /* --- Buttons --- */
@@ -115,6 +115,42 @@
         .stat-badge.pass-rate { bottom: 40px; left: 0; }
         .stat-badge.rated { top: 20px; right: 20px; }
 
+        /* --- PRICING SECTION STYLES --- */
+        .pricing-section { padding: 4rem 0; text-align: center; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .pricing-card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; padding: 2.5rem;
+            position: relative; transition: 0.3s; display: flex; flex-direction: column;
+        }
+        .pricing-card:hover { transform: translateY(-10px); border-color: var(--primary); }
+        .pricing-card.popular { border: 1px solid var(--primary); box-shadow: 0 0 30px rgba(14, 165, 233, 0.15); background: linear-gradient(180deg, rgba(14, 165, 233, 0.05) 0%, var(--bg-card) 100%); }
+        
+        .badge-popular {
+            position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+            background: var(--primary); color: #fff; padding: 4px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 700;
+        }
+        
+        .price-tag { font-size: 2.5rem; font-weight: 800; margin: 1.5rem 0 0.5rem; color: #fff; }
+        .price-period { color: var(--text-muted); font-size: 0.9rem; }
+        .plan-name { font-size: 1.2rem; font-weight: 700; color: var(--text-main); }
+        
+        .plan-features { margin: 2rem 0; text-align: left; flex-grow: 1; }
+        .feature-item { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 0.95rem; color: #cbd5e1; }
+        .feature-item i { color: var(--success); }
+        .feature-item.disabled { opacity: 0.5; }
+        .feature-item.disabled i { color: var(--text-muted); }
+
+        /* --- FEATURES & TESTIMONIALS PLACEHOLDERS --- */
+        .section-header { text-align: center; margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto; }
+        .section-header h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .feature-box { background: rgba(255,255,255,0.03); padding: 2rem; border-radius: 16px; border: 1px solid var(--border); }
+        .feature-box i { font-size: 2rem; color: var(--primary); margin-bottom: 1rem; }
+        
+        .testimonial-card { background: var(--bg-card); padding: 2rem; border-radius: 16px; border: 1px solid var(--border); }
+        .user-profile { display: flex; align-items: center; gap: 1rem; margin-top: 1.5rem; }
+        .user-img { width: 45px; height: 45px; border-radius: 50%; background: #ccc; }
+
         /* --- VIEW 2: DASHBOARD --- */
         .dashboard-view { padding-top: 40px; }
         .dash-nav { display: flex; justify-content: space-between; margin-bottom: 3rem; align-items: center; }
@@ -135,29 +171,44 @@
         .recent-info span { font-size: 0.8rem; color: var(--text-muted); }
         .score-pill { background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
 
-        /* --- VIEW 3: SUBJECTS --- */
+        /* --- VIEW 3: SUBJECTS (WITH IMAGES) --- */
         .subjects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem; }
         .subject-card {
-            background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 2rem;
+            background-color: var(--bg-card); /* Fallback */
+            background-size: cover; background-position: center;
+            border: 1px solid var(--border); border-radius: 20px; padding: 2rem;
             transition: 0.3s; position: relative; overflow: hidden;
+            /* Flex layout to push content down if needed, or keep it overlay style */
+            display: flex; flex-direction: column; justify-content: flex-end;
+            min-height: 380px; /* Taller to show image */
         }
+        /* Dark Gradient Overlay so text pops */
+        .subject-card::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(to top, #020617 30%, rgba(2, 6, 23, 0.4) 100%);
+            z-index: 1;
+        }
+        /* Ensure content is above overlay */
+        .subject-card > * { position: relative; z-index: 2; }
+        
         .subject-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .subject-card:hover::before { background: linear-gradient(to top, #020617 40%, rgba(14, 165, 233, 0.2) 100%); }
         
-        .subject-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
-        .subject-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem; min-height: 40px; }
+        .subject-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .subject-desc { color: #cbd5e1; font-size: 0.9rem; margin-bottom: 1.5rem; min-height: 40px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
         
-        .subject-meta { display: flex; justify-content: space-between; margin-bottom: 2rem; text-align: center; }
-        .meta-item i { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 8px; display: block; }
-        .meta-item span { font-size: 0.85rem; color: var(--text-muted); display: block; }
-        .meta-val { font-weight: 700; font-size: 1.1rem; color: #fff; margin-bottom: 2px; }
+        .subject-meta { display: flex; justify-content: space-between; margin-bottom: 1.5rem; text-align: center; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 12px; backdrop-filter: blur(4px); }
+        .meta-item i { color: var(--primary); font-size: 1.1rem; margin-bottom: 8px; display: block; }
+        .meta-item span { font-size: 0.75rem; color: #cbd5e1; display: block; }
+        .meta-val { font-weight: 700; font-size: 1rem; color: #fff; margin-bottom: 2px; }
 
-        .progress-bar-bg { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-bottom: 1rem; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--success); border-radius: 3px; width: 0%; }
+        .progress-bar-bg { width: 100%; height: 6px; background: rgba(255,255,255,0.2); border-radius: 3px; margin-bottom: 1rem; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--success); border-radius: 3px; width: 0%; box-shadow: 0 0 10px var(--success); }
 
         .performance-box {
-            background: rgba(255,255,255,0.03); border-radius: 8px; padding: 12px; text-align: center; margin-bottom: 1.5rem;
+            background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; text-align: center; margin-bottom: 1.5rem; backdrop-filter: blur(5px);
         }
-        .perf-label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; }
+        .perf-label { display: block; font-size: 0.8rem; color: #cbd5e1; margin-bottom: 4px; }
         .perf-val { font-size: 0.9rem; font-weight: 600; color: #fff; }
 
         /* --- VIEW 4: CHAPTERS LIST --- */
@@ -241,14 +292,15 @@
     <!-- === HEADER === -->
     <div class="container">
         <header class="app-header">
-            <a href="#" class="brand" onclick="navigate('landing')">
+            <a class="brand" onclick="navigate('landing')">
                 <i class="fa-solid fa-user-nurse"></i> Pass Your License
             </a>
             <nav class="nav-links">
-                <a href="#" class="hidden-mobile">Features</a>
-                <a href="#" class="hidden-mobile">Testimonials</a>
-                <a href="#" class="hidden-mobile">Pricing</a>
-                <a href="#" onclick="navigate('login')" style="margin-left: 3rem;">Sign In</a>
+                <!-- Navigation updated to actually work -->
+                <a class="hidden-mobile" onclick="navigate('features')">Features</a>
+                <a class="hidden-mobile" onclick="navigate('testimonials')">Testimonials</a>
+                <a class="hidden-mobile" onclick="navigate('pricing')">Pricing</a>
+                <a onclick="navigate('login')" style="margin-left: 3rem;">Sign In</a>
                 <button class="btn btn-primary" onclick="navigate('dashboard')" style="margin-left: 1.5rem; padding: 8px 20px;">
                     Get Started Free
                 </button>
@@ -270,14 +322,14 @@
                 </div>
 
                 <div style="display: flex; gap: 1rem;">
-                    <button class="btn btn-primary" onclick="navigate('dashboard')">Get Started Free <i class="fa-solid fa-arrow-right"></i></button>
-                    <button class="btn btn-outline" onclick="navigate('login')">Sign In</button>
+                    <button class="btn btn-primary" onclick="navigate('pricing')">View Plans</button>
+                    <button class="btn btn-outline" onclick="navigate('dashboard')">Try Demo</button>
                 </div>
             </div>
 
             <div class="hero-image-wrapper">
                 <div class="hero-circle-bg"></div>
-                <!-- Placeholder for Nurse Image (using FontAwesome for code simplicity, normally an <img>) -->
+                <!-- Placeholder for Nurse Image -->
                 <img src="https://img.freepik.com/free-photo/doctor-offering-medical-advice-virtual-appointment_23-2149309825.jpg?t=st=1729000000~exp=1729003600~hmac=abcdef" 
                      alt="Nurse" 
                      style="width: 400px; height: 500px; object-fit: cover; border-radius: 0 0 200px 200px; position: relative; z-index: 1; mask-image: linear-gradient(to bottom, black 80%, transparent 100%);">
@@ -294,6 +346,123 @@
 
                 <div class="stat-badge rated">
                     <span style="font-weight: 700; font-size: 0.9rem;">#1 Rated</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- === VIEW: PRICING (NEW) === -->
+    <section id="pricing" class="container hidden" style="padding-top: 100px;">
+        <div class="section-header">
+            <div class="hero-tag" style="margin-bottom: 1rem;">Flexible Pricing</div>
+            <h2>Invest in Your Future</h2>
+            <p style="color: var(--text-muted);">Choose the plan that fits your study timeline. All plans include full access to our question bank.</p>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- Plan 1 -->
+            <div class="pricing-card">
+                <div class="plan-name">Quarterly</div>
+                <div class="price-tag">$49<span class="price-period">/3 mos</span></div>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Great for final review before exams.</p>
+                
+                <div class="plan-features">
+                    <div class="feature-item"><i class="fa-solid fa-check"></i> 3 Months Access</div>
+                    <div class="feature-item"><i class="fa-solid fa-check"></i> 2,000+ Questions</div>
+                    <div class="feature-item"><i class="fa-solid fa-check"></i> Basic Analytics</div>
+                    <div class="feature-item disabled"><i class="fa-solid fa-xmark"></i> Money-back Guarantee</div>
+                </div>
+                <button class="btn btn-outline" style="width: 100%;">Choose Quarterly</button>
+            </div>
+
+            <!-- Plan 2 (Popular) -->
+            <div class="pricing-card popular">
+                <div class="badge-popular">MOST POPULAR</div>
+                <div class="plan-name">Semi-Annual</div>
+                <div class="price-tag">$79<span class="price-period">/6 mos</span></div>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Perfect for a full semester of study.</p>
+                
+                <div class="plan-features">
+                    <div class="feature-item"><i class="fa-solid fa-check"></i> 6 Months Access</div>
+                    <div class="feature-item"><i class="fa-solid fa-check"></i> All 5,000+ Questions</div>
+                    <div class="feature-item"><i class="fa-solid fa-check"></i> Advanced Analytics</div>
+                    <div class="feature-item"><i class="fa-solid fa-check"></i> Mobile App Access</div>
+                </div>
+                <button class="btn btn-accent">Choose Semi-Annual</button>
+            </div>
+
+            <!-- Plan 3 -->
+            <div class="pricing-card">
+                <div class="plan-name">Annual</div>
+                <div class="price-tag">$119<span class="price-period">/year</span></div>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Best value for long-term preparation.</p>
+                
+                <div class="plan-features">
+                    <div class="feature-item"><i class="fa-solid fa-check"></i> 12 Months Access</div>
+                    <div class="feature-item"><i class="fa-solid fa-check"></i> All 5,000+ Questions</div>
+                    <div class="feature-item"><i class="fa-solid fa-check"></i> Personalized Study Plan</div>
+                    <div class="feature-item"><i class="fa-solid fa-check"></i> Pass Guarantee*</div>
+                </div>
+                <button class="btn btn-outline" style="width: 100%;">Choose Annual</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- === VIEW: FEATURES (NEW) === -->
+    <section id="features" class="container hidden" style="padding-top: 100px;">
+        <div class="section-header">
+            <h2>Why Students Love Us</h2>
+            <p style="color: var(--text-muted);">Built by nurses, for nurses.</p>
+        </div>
+        <div class="grid-3">
+            <div class="feature-box">
+                <i class="fa-solid fa-brain"></i>
+                <h3>Adaptive Learning</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Our AI algorithm adjusts question difficulty based on your performance.</p>
+            </div>
+            <div class="feature-box">
+                <i class="fa-solid fa-chart-pie"></i>
+                <h3>Deep Analytics</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Identify weak spots instantly with detailed charts and progress tracking.</p>
+            </div>
+            <div class="feature-box">
+                <i class="fa-solid fa-mobile-screen"></i>
+                <h3>Study Anywhere</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Seamlessly switch between phone, tablet, and desktop.</p>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 3rem;">
+            <button class="btn btn-primary" onclick="navigate('pricing')">See Plans</button>
+        </div>
+    </section>
+
+    <!-- === VIEW: TESTIMONIALS (NEW) === -->
+    <section id="testimonials" class="container hidden" style="padding-top: 100px;">
+        <div class="section-header">
+            <h2>Success Stories</h2>
+            <p style="color: var(--text-muted);">Join thousands who passed their exams.</p>
+        </div>
+        <div class="grid-3">
+            <div class="testimonial-card">
+                <div style="color: #fbbf24; margin-bottom: 1rem;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                <p style="font-size: 0.95rem; line-height: 1.6;">"I failed my first attempt using books. After 3 months with Pass Your License, I passed with 75 questions! The rationales are amazing."</p>
+                <div class="user-profile">
+                    <div class="user-img" style="background-image: url('https://randomuser.me/api/portraits/women/44.jpg'); background-size: cover;"></div>
+                    <div>
+                        <div style="font-weight: 700; font-size: 0.9rem;">Sarah J.</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">RN, BSN</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div style="color: #fbbf24; margin-bottom: 1rem;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                <p style="font-size: 0.95rem; line-height: 1.6;">"The detailed analytics helped me focus exactly on what I didn't know. Highly recommend the annual plan for peace of mind."</p>
+                <div class="user-profile">
+                    <div class="user-img" style="background-image: url('https://randomuser.me/api/portraits/men/32.jpg'); background-size: cover;"></div>
+                    <div>
+                        <div style="font-weight: 700; font-size: 0.9rem;">Michael T.</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">LPN Student</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -380,8 +549,8 @@
         </div>
 
         <div class="subjects-grid">
-            <!-- Card 1: Pediatric -->
-            <div class="subject-card">
+            <!-- Card 1: Pediatric (With Image) -->
+            <div class="subject-card" style="background-image: url('https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&q=80&w=800');">
                 <h3 class="subject-title">Pediatric</h3>
                 <p class="subject-desc">Master the fundamentals and advanced concepts in this subject.</p>
                 
@@ -398,9 +567,9 @@
                 <button class="btn btn-primary" style="width: 100%; justify-content: center;">Start Subject <i class="fa-solid fa-arrow-right"></i></button>
             </div>
 
-            <!-- Card 2: Fundamentals (Active) -->
-            <div class="subject-card">
-                <h3 class="subject-title">Fundamentals of Nursing</h3>
+            <!-- Card 2: Fundamentals (With Image) -->
+            <div class="subject-card" style="background-image: url('https://images.unsplash.com/photo-1584036561566-b45238f2e121?auto=format&fit=crop&q=80&w=800');">
+                <h3 class="subject-title">Fundamentals</h3>
                 <p class="subject-desc">Core principles and basic skills essential for all nursing practice.</p>
                 
                 <div class="subject-meta">
@@ -416,17 +585,17 @@
                 <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="navigate('chapters')">Start Subject <i class="fa-solid fa-arrow-right"></i></button>
             </div>
 
-            <!-- Card 3: Maternity -->
-            <div class="subject-card">
-                <div style="display: flex; justify-content: space-between;">
+            <!-- Card 3: Maternity (With Image) -->
+            <div class="subject-card" style="background-image: url('https://images.unsplash.com/photo-1555252333-9f8e92e65df9?auto=format&fit=crop&q=80&w=800');">
+                <div style="display: flex; justify-content: space-between; position: relative; z-index: 2;">
                     <h3 class="subject-title">Maternity</h3>
                     <div class="score-pill">83%</div>
                 </div>
                 <p class="subject-desc">Comprehensive maternity and obstetric nursing questions covering pregnancy...</p>
                 
-                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px;">
-                    <span style="color: var(--text-muted);">Progress</span>
-                    <span>5/6 chapters</span>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px; position: relative; z-index: 2;">
+                    <span style="color: #cbd5e1;">Progress</span>
+                    <span style="color: #fff;">5/6 chapters</span>
                 </div>
                 <div class="progress-bar-bg"><div class="progress-fill" style="width: 83%;"></div></div>
 
@@ -602,10 +771,13 @@
     <script>
         function navigate(viewId) {
             // Hide all sections
-            const sections = ['landing', 'dashboard', 'subjects', 'chapters', 'quiz'];
+            const sections = ['landing', 'pricing', 'features', 'testimonials', 'dashboard', 'subjects', 'chapters', 'quiz'];
             sections.forEach(id => {
-                document.getElementById(id).classList.add('hidden');
-                document.getElementById(id).classList.remove('fade-in');
+                const el = document.getElementById(id);
+                if (el) {
+                    el.classList.add('hidden');
+                    el.classList.remove('fade-in');
+                }
             });
 
             // Show target
@@ -613,11 +785,6 @@
             if(target) {
                 target.classList.remove('hidden');
                 target.classList.add('fade-in');
-                
-                // If dashboard or later, show specialized UI, else show full landing
-                if(viewId !== 'landing') {
-                    // Normally manage header visibility here
-                }
             }
             window.scrollTo(0, 0);
         }
