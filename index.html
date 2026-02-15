@@ -29,6 +29,8 @@
             --border: rgba(255, 255, 255, 0.08);
         }
 
+        html { scroll-behavior: smooth; }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-dark);
@@ -36,6 +38,8 @@
             min-height: 100vh;
             overflow-x: hidden;
             line-height: 1.6;
+            display: flex;
+            flex-direction: column;
         }
 
         /* --- Global Utilities --- */
@@ -62,12 +66,17 @@
         /* --- Header / Nav --- */
         .app-header {
             padding: 1.5rem 0; display: flex; justify-content: space-between; align-items: center;
-            position: absolute; top: 0; left: 0; width: 100%; z-index: 50;
+            position: sticky; top: 0; left: 0; width: 100%; z-index: 100;
+            background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(10px);
         }
         .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.2rem; color: #fff; text-decoration: none; cursor: pointer; }
         .brand i { color: var(--primary); font-size: 1.4rem; }
+        
+        .nav-links { display: flex; align-items: center; }
         .nav-links a { color: var(--text-muted); text-decoration: none; margin-left: 2rem; font-size: 0.95rem; font-weight: 500; transition: color 0.2s; cursor: pointer;}
         .nav-links a:hover { color: #fff; }
+
+        .mobile-menu-btn { display: none; color: #fff; font-size: 1.5rem; background: none; border: none; cursor: pointer; }
 
         /* --- Buttons --- */
         .btn-primary {
@@ -87,7 +96,7 @@
         .btn-accent:hover { background: var(--primary-dark); }
 
         /* --- VIEW 1: LANDING PAGE --- */
-        .landing-view { min-height: 100vh; display: flex; align-items: center; padding-top: 80px; position: relative; }
+        .landing-view { min-height: 100vh; display: flex; align-items: center; padding-top: 40px; position: relative; }
         .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
         .hero-tag {
             background: rgba(255,255,255,0.1); padding: 6px 16px; border-radius: 20px; font-size: 0.85rem;
@@ -116,7 +125,6 @@
         .stat-badge.rated { top: 20px; right: 20px; }
 
         /* --- PRICING SECTION STYLES --- */
-        .pricing-section { padding: 4rem 0; text-align: center; }
         .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
         .pricing-card {
             background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; padding: 2.5rem;
@@ -140,7 +148,7 @@
         .feature-item.disabled { opacity: 0.5; }
         .feature-item.disabled i { color: var(--text-muted); }
 
-        /* --- FEATURES & TESTIMONIALS PLACEHOLDERS --- */
+        /* --- FEATURES & TESTIMONIALS & FAQ --- */
         .section-header { text-align: center; margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto; }
         .section-header h2 { font-size: 2.5rem; margin-bottom: 1rem; }
         .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
@@ -150,6 +158,14 @@
         .testimonial-card { background: var(--bg-card); padding: 2rem; border-radius: 16px; border: 1px solid var(--border); }
         .user-profile { display: flex; align-items: center; gap: 1rem; margin-top: 1.5rem; }
         .user-img { width: 45px; height: 45px; border-radius: 50%; background: #ccc; }
+
+        /* FAQ Styles */
+        .faq-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 1rem; overflow: hidden; }
+        .faq-question { padding: 1.5rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
+        .faq-answer { padding: 0 1.5rem; height: 0; overflow: hidden; transition: all 0.3s ease; color: var(--text-muted); font-size: 0.95rem; }
+        .faq-item.active .faq-answer { padding-bottom: 1.5rem; height: auto; }
+        .faq-icon { transition: 0.3s; }
+        .faq-item.active .faq-icon { transform: rotate(180deg); }
 
         /* --- VIEW 2: DASHBOARD --- */
         .dashboard-view { padding-top: 40px; }
@@ -174,23 +190,19 @@
         /* --- VIEW 3: SUBJECTS (WITH IMAGES) --- */
         .subjects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem; }
         .subject-card {
-            background-color: var(--bg-card); /* Fallback */
+            background-color: var(--bg-card);
             background-size: cover; background-position: center;
             border: 1px solid var(--border); border-radius: 20px; padding: 2rem;
             transition: 0.3s; position: relative; overflow: hidden;
-            /* Flex layout to push content down if needed, or keep it overlay style */
             display: flex; flex-direction: column; justify-content: flex-end;
-            min-height: 380px; /* Taller to show image */
+            min-height: 380px; 
         }
-        /* Dark Gradient Overlay so text pops */
         .subject-card::before {
             content: ''; position: absolute; inset: 0;
             background: linear-gradient(to top, #020617 30%, rgba(2, 6, 23, 0.4) 100%);
             z-index: 1;
         }
-        /* Ensure content is above overlay */
         .subject-card > * { position: relative; z-index: 2; }
-        
         .subject-card:hover { border-color: var(--primary); transform: translateY(-5px); }
         .subject-card:hover::before { background: linear-gradient(to top, #020617 40%, rgba(14, 165, 233, 0.2) 100%); }
         
@@ -272,6 +284,15 @@
         }
         .feedback-box h4 { display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem; color: var(--error); }
 
+        /* --- FOOTER --- */
+        .app-footer { background: #020617; border-top: 1px solid var(--border); padding: 4rem 0 2rem; margin-top: auto; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2rem; margin-bottom: 3rem; }
+        .footer-col h4 { font-size: 1.1rem; margin-bottom: 1.5rem; color: #fff; }
+        .footer-col a { display: block; color: var(--text-muted); text-decoration: none; margin-bottom: 0.8rem; font-size: 0.9rem; transition: 0.2s; }
+        .footer-col a:hover { color: var(--primary); }
+        .social-icons a { display: inline-block; width: 36px; height: 36px; background: rgba(255,255,255,0.05); border-radius: 50%; text-align: center; line-height: 36px; margin-right: 10px; color: #fff; }
+        .social-icons a:hover { background: var(--primary); }
+
         /* Responsive */
         @media(max-width: 768px) {
             .hero-grid { grid-template-columns: 1fr; text-align: center; }
@@ -281,6 +302,9 @@
             .stats-row, .dashboard-grid { grid-template-columns: 1fr; }
             .ch-item { flex-direction: column; align-items: flex-start; gap: 1rem; }
             .ch-right { width: 100%; justify-content: space-between; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .hidden-mobile { display: none; }
+            .mobile-menu-btn { display: block; }
         }
     </style>
 </head>
@@ -290,23 +314,23 @@
     <div class="bg-glow glow-2"></div>
 
     <!-- === HEADER === -->
-    <div class="container">
-        <header class="app-header">
+    <header class="app-header">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
             <a class="brand" onclick="navigate('landing')">
                 <i class="fa-solid fa-user-nurse"></i> Pass Your License
             </a>
             <nav class="nav-links">
-                <!-- Navigation updated to actually work -->
                 <a class="hidden-mobile" onclick="navigate('features')">Features</a>
                 <a class="hidden-mobile" onclick="navigate('testimonials')">Testimonials</a>
                 <a class="hidden-mobile" onclick="navigate('pricing')">Pricing</a>
                 <a onclick="navigate('login')" style="margin-left: 3rem;">Sign In</a>
-                <button class="btn btn-primary" onclick="navigate('dashboard')" style="margin-left: 1.5rem; padding: 8px 20px;">
+                <button class="btn btn-primary hidden-mobile" onclick="navigate('dashboard')" style="margin-left: 1.5rem; padding: 8px 20px;">
                     Get Started Free
                 </button>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()"><i class="fa-solid fa-bars"></i></button>
             </nav>
-        </header>
-    </div>
+        </div>
+    </header>
 
     <!-- === VIEW 1: LANDING PAGE === -->
     <section id="landing" class="landing-view container fade-in">
@@ -329,7 +353,6 @@
 
             <div class="hero-image-wrapper">
                 <div class="hero-circle-bg"></div>
-                <!-- Placeholder for Nurse Image -->
                 <img src="https://img.freepik.com/free-photo/doctor-offering-medical-advice-virtual-appointment_23-2149309825.jpg?t=st=1729000000~exp=1729003600~hmac=abcdef" 
                      alt="Nurse" 
                      style="width: 400px; height: 500px; object-fit: cover; border-radius: 0 0 200px 200px; position: relative; z-index: 1; mask-image: linear-gradient(to bottom, black 80%, transparent 100%);">
@@ -343,20 +366,16 @@
                         <div style="font-size: 0.8rem; color: var(--text-muted);">Pass Rate</div>
                     </div>
                 </div>
-
-                <div class="stat-badge rated">
-                    <span style="font-weight: 700; font-size: 0.9rem;">#1 Rated</span>
-                </div>
             </div>
         </div>
     </section>
 
-    <!-- === VIEW: PRICING (NEW) === -->
-    <section id="pricing" class="container hidden" style="padding-top: 100px;">
+    <!-- === VIEW: PRICING (UPDATED) === -->
+    <section id="pricing" class="container hidden" style="padding-top: 60px;">
         <div class="section-header">
             <div class="hero-tag" style="margin-bottom: 1rem;">Flexible Pricing</div>
             <h2>Invest in Your Future</h2>
-            <p style="color: var(--text-muted);">Choose the plan that fits your study timeline. All plans include full access to our question bank.</p>
+            <p style="color: var(--text-muted);">Choose the plan that fits your study timeline. All plans include full access.</p>
         </div>
 
         <div class="pricing-grid">
@@ -364,12 +383,10 @@
             <div class="pricing-card">
                 <div class="plan-name">Quarterly</div>
                 <div class="price-tag">$49<span class="price-period">/3 mos</span></div>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Great for final review before exams.</p>
-                
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Great for final review.</p>
                 <div class="plan-features">
                     <div class="feature-item"><i class="fa-solid fa-check"></i> 3 Months Access</div>
                     <div class="feature-item"><i class="fa-solid fa-check"></i> 2,000+ Questions</div>
-                    <div class="feature-item"><i class="fa-solid fa-check"></i> Basic Analytics</div>
                     <div class="feature-item disabled"><i class="fa-solid fa-xmark"></i> Money-back Guarantee</div>
                 </div>
                 <button class="btn btn-outline" style="width: 100%;">Choose Quarterly</button>
@@ -380,12 +397,10 @@
                 <div class="badge-popular">MOST POPULAR</div>
                 <div class="plan-name">Semi-Annual</div>
                 <div class="price-tag">$79<span class="price-period">/6 mos</span></div>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Perfect for a full semester of study.</p>
-                
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Perfect for a full semester.</p>
                 <div class="plan-features">
                     <div class="feature-item"><i class="fa-solid fa-check"></i> 6 Months Access</div>
                     <div class="feature-item"><i class="fa-solid fa-check"></i> All 5,000+ Questions</div>
-                    <div class="feature-item"><i class="fa-solid fa-check"></i> Advanced Analytics</div>
                     <div class="feature-item"><i class="fa-solid fa-check"></i> Mobile App Access</div>
                 </div>
                 <button class="btn btn-accent">Choose Semi-Annual</button>
@@ -395,21 +410,52 @@
             <div class="pricing-card">
                 <div class="plan-name">Annual</div>
                 <div class="price-tag">$119<span class="price-period">/year</span></div>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Best value for long-term preparation.</p>
-                
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Best value for long-term.</p>
                 <div class="plan-features">
                     <div class="feature-item"><i class="fa-solid fa-check"></i> 12 Months Access</div>
                     <div class="feature-item"><i class="fa-solid fa-check"></i> All 5,000+ Questions</div>
-                    <div class="feature-item"><i class="fa-solid fa-check"></i> Personalized Study Plan</div>
                     <div class="feature-item"><i class="fa-solid fa-check"></i> Pass Guarantee*</div>
                 </div>
                 <button class="btn btn-outline" style="width: 100%;">Choose Annual</button>
             </div>
         </div>
+
+        <!-- FAQ Section (NEW Suggestion) -->
+        <div style="margin-top: 5rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+            <h3 style="text-align: center; margin-bottom: 2rem; font-size: 1.8rem;">Frequently Asked Questions</h3>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Can I cancel my subscription?
+                    <i class="fa-solid fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    Yes, you can cancel your subscription renewal at any time from your account settings. You will retain access until the end of your current billing period.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Is there a mobile app?
+                    <i class="fa-solid fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    Yes! Our platform is fully responsive for mobile browsers, and we have a dedicated app for Semi-Annual and Annual plan subscribers.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    What is the Pass Guarantee?
+                    <i class="fa-solid fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    If you complete 90% of our questions with an average score of 70% and don't pass your exam, we will extend your subscription for free or provide a refund (Annual plan only).
+                </div>
+            </div>
+        </div>
     </section>
 
-    <!-- === VIEW: FEATURES (NEW) === -->
-    <section id="features" class="container hidden" style="padding-top: 100px;">
+    <!-- === VIEW: FEATURES === -->
+    <section id="features" class="container hidden" style="padding-top: 60px;">
         <div class="section-header">
             <h2>Why Students Love Us</h2>
             <p style="color: var(--text-muted);">Built by nurses, for nurses.</p>
@@ -418,26 +464,23 @@
             <div class="feature-box">
                 <i class="fa-solid fa-brain"></i>
                 <h3>Adaptive Learning</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Our AI algorithm adjusts question difficulty based on your performance.</p>
+                <p style="color: var(--text-muted);">Our AI algorithm adjusts question difficulty based on your performance.</p>
             </div>
             <div class="feature-box">
                 <i class="fa-solid fa-chart-pie"></i>
                 <h3>Deep Analytics</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Identify weak spots instantly with detailed charts and progress tracking.</p>
+                <p style="color: var(--text-muted);">Identify weak spots instantly with detailed charts and progress tracking.</p>
             </div>
             <div class="feature-box">
                 <i class="fa-solid fa-mobile-screen"></i>
                 <h3>Study Anywhere</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Seamlessly switch between phone, tablet, and desktop.</p>
+                <p style="color: var(--text-muted);">Seamlessly switch between phone, tablet, and desktop.</p>
             </div>
-        </div>
-        <div style="text-align: center; margin-top: 3rem;">
-            <button class="btn btn-primary" onclick="navigate('pricing')">See Plans</button>
         </div>
     </section>
 
-    <!-- === VIEW: TESTIMONIALS (NEW) === -->
-    <section id="testimonials" class="container hidden" style="padding-top: 100px;">
+    <!-- === VIEW: TESTIMONIALS === -->
+    <section id="testimonials" class="container hidden" style="padding-top: 60px;">
         <div class="section-header">
             <h2>Success Stories</h2>
             <p style="color: var(--text-muted);">Join thousands who passed their exams.</p>
@@ -445,7 +488,7 @@
         <div class="grid-3">
             <div class="testimonial-card">
                 <div style="color: #fbbf24; margin-bottom: 1rem;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                <p style="font-size: 0.95rem; line-height: 1.6;">"I failed my first attempt using books. After 3 months with Pass Your License, I passed with 75 questions! The rationales are amazing."</p>
+                <p style="font-size: 0.95rem;">"I failed my first attempt using books. After 3 months with Pass Your License, I passed with 75 questions!"</p>
                 <div class="user-profile">
                     <div class="user-img" style="background-image: url('https://randomuser.me/api/portraits/women/44.jpg'); background-size: cover;"></div>
                     <div>
@@ -456,7 +499,7 @@
             </div>
             <div class="testimonial-card">
                 <div style="color: #fbbf24; margin-bottom: 1rem;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                <p style="font-size: 0.95rem; line-height: 1.6;">"The detailed analytics helped me focus exactly on what I didn't know. Highly recommend the annual plan for peace of mind."</p>
+                <p style="font-size: 0.95rem;">"Highly recommend the annual plan for peace of mind. The rationales are amazing."</p>
                 <div class="user-profile">
                     <div class="user-img" style="background-image: url('https://randomuser.me/api/portraits/men/32.jpg'); background-size: cover;"></div>
                     <div>
@@ -477,13 +520,12 @@
             </div>
             <div style="text-align: right;">
                 <span style="display: block; font-size: 0.8rem; color: var(--text-muted);">Total Score</span>
-                <span style="font-size: 1.5rem; font-weight: 700;">0</span>
+                <span style="font-size: 1.5rem; font-weight: 700;">1,240</span>
             </div>
         </div>
-
         <div class="stats-row">
             <div class="stat-box">
-                <h3>Questions Answered <i class="fa-solid fa-book-open"></i></h3>
+                <h3>Questions <i class="fa-solid fa-book-open"></i></h3>
                 <div class="stat-value">278</div>
             </div>
             <div class="stat-box">
@@ -491,13 +533,11 @@
                 <div class="stat-value">30%</div>
             </div>
             <div class="stat-box">
-                <h3>Chapters Done <i class="fa-solid fa-trophy"></i></h3>
+                <h3>Chapters <i class="fa-solid fa-trophy"></i></h3>
                 <div class="stat-value">5</div>
             </div>
         </div>
-
         <div class="dashboard-grid">
-            <!-- Quick Start -->
             <div class="dash-card">
                 <div class="dash-card-header">Quick Start</div>
                 <p style="color: var(--text-muted); margin-bottom: 2rem;">Jump into your studies</p>
@@ -505,35 +545,17 @@
                     Browse Subjects
                 </button>
             </div>
-
-            <!-- Recent Activity -->
             <div class="dash-card">
                 <div class="dash-card-header">Recent Activity</div>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Your latest quiz sessions</p>
-                
                 <div class="recent-item">
-                    <div class="recent-info">
-                        <h4>Chapter 3</h4>
-                        <span>Pediatric</span>
-                    </div>
+                    <div class="recent-info"><h4>Chapter 3</h4><span>Pediatric</span></div>
                     <div class="score-pill">50%</div>
                 </div>
                 <div class="recent-item">
-                    <div class="recent-info">
-                        <h4>Chapter 6</h4>
-                        <span>Maternity</span>
-                    </div>
+                    <div class="recent-info"><h4>Chapter 6</h4><span>Maternity</span></div>
                     <div class="score-pill">29%</div>
                 </div>
-                <div class="recent-item">
-                    <div class="recent-info">
-                        <h4>Chapter 5</h4>
-                        <span>Maternity</span>
-                    </div>
-                    <div class="score-pill">26%</div>
-                </div>
-                
-                <button class="btn btn-outline" style="width: 100%; margin-top: 1rem; border-color: rgba(255,255,255,0.1); font-size: 0.9rem;">View All Progress</button>
+                <button class="btn btn-outline" style="width: 100%; margin-top: 1rem; font-size: 0.9rem;">View All Progress</button>
             </div>
         </div>
     </section>
@@ -549,169 +571,75 @@
         </div>
 
         <div class="subjects-grid">
-            <!-- Card 1: Pediatric (With Image) -->
+            <!-- Card 1: Pediatric -->
             <div class="subject-card" style="background-image: url('https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&q=80&w=800');">
                 <h3 class="subject-title">Pediatric</h3>
                 <p class="subject-desc">Master the fundamentals and advanced concepts in this subject.</p>
-                
                 <div class="subject-meta">
                     <div class="meta-item"><i class="fa-solid fa-book"></i><div class="meta-val">4</div><span>Chapters</span></div>
                     <div class="meta-item"><i class="fa-solid fa-user-group"></i><div class="meta-val">247</div><span>Questions</span></div>
                     <div class="meta-item"><i class="fa-regular fa-clock"></i><div class="meta-val">25</div><span>Hours</span></div>
                 </div>
-
-                <div class="performance-box">
-                    <span class="perf-label">Your Performance</span>
-                    <span class="perf-val">50% accuracy • 1 correct answers</span>
-                </div>
                 <button class="btn btn-primary" style="width: 100%; justify-content: center;">Start Subject <i class="fa-solid fa-arrow-right"></i></button>
             </div>
 
-            <!-- Card 2: Fundamentals (With Image) -->
+            <!-- Card 2: Fundamentals -->
             <div class="subject-card" style="background-image: url('https://images.unsplash.com/photo-1584036561566-b45238f2e121?auto=format&fit=crop&q=80&w=800');">
                 <h3 class="subject-title">Fundamentals</h3>
                 <p class="subject-desc">Core principles and basic skills essential for all nursing practice.</p>
-                
                 <div class="subject-meta">
                     <div class="meta-item"><i class="fa-solid fa-book"></i><div class="meta-val">7</div><span>Chapters</span></div>
                     <div class="meta-item"><i class="fa-solid fa-user-group"></i><div class="meta-val">449</div><span>Questions</span></div>
                     <div class="meta-item"><i class="fa-regular fa-clock"></i><div class="meta-val">45</div><span>Hours</span></div>
                 </div>
-
-                <div class="performance-box">
-                    <span class="perf-label">Your Performance</span>
-                    <span class="perf-val">22% accuracy • 2 correct answers</span>
-                </div>
                 <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="navigate('chapters')">Start Subject <i class="fa-solid fa-arrow-right"></i></button>
             </div>
 
-            <!-- Card 3: Maternity (With Image) -->
+            <!-- Card 3: Maternity -->
             <div class="subject-card" style="background-image: url('https://images.unsplash.com/photo-1555252333-9f8e92e65df9?auto=format&fit=crop&q=80&w=800');">
                 <div style="display: flex; justify-content: space-between; position: relative; z-index: 2;">
                     <h3 class="subject-title">Maternity</h3>
                     <div class="score-pill">83%</div>
                 </div>
                 <p class="subject-desc">Comprehensive maternity and obstetric nursing questions covering pregnancy...</p>
-                
                 <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px; position: relative; z-index: 2;">
-                    <span style="color: #cbd5e1;">Progress</span>
-                    <span style="color: #fff;">5/6 chapters</span>
+                    <span style="color: #cbd5e1;">Progress</span><span style="color: #fff;">5/6 chapters</span>
                 </div>
                 <div class="progress-bar-bg"><div class="progress-fill" style="width: 83%;"></div></div>
-
-                <div class="subject-meta">
-                    <div class="meta-item"><i class="fa-solid fa-book"></i><div class="meta-val">6</div><span>Chapters</span></div>
-                    <div class="meta-item"><i class="fa-solid fa-user-group"></i><div class="meta-val">300</div><span>Questions</span></div>
-                    <div class="meta-item"><i class="fa-regular fa-clock"></i><div class="meta-val">30</div><span>Hours</span></div>
-                </div>
-
-                <div class="performance-box">
-                    <span class="perf-label">Your Performance</span>
-                    <span class="perf-val">26% accuracy • 66 correct answers</span>
-                </div>
                 <button class="btn btn-primary" style="width: 100%; justify-content: center;">Continue Subject <i class="fa-solid fa-arrow-right"></i></button>
             </div>
         </div>
     </section>
 
-    <!-- === VIEW 4: CHAPTERS (Fundamentals) === -->
+    <!-- === VIEW 4: CHAPTERS === -->
     <section id="chapters" class="container dashboard-view hidden">
         <button class="btn" style="color: var(--text-muted); background: none; margin-bottom: 1rem;" onclick="navigate('subjects')">
             <i class="fa-solid fa-arrow-left"></i> Back to Subjects
         </button>
-        
         <div class="chapter-header">
             <div>
                 <h1 style="margin-bottom: 0.5rem;">Fundamentals of Nursing</h1>
                 <p style="color: var(--text-muted);">Core principles and basic skills essential for all nursing practice</p>
             </div>
             <div style="display: flex; gap: 3rem; text-align: center;">
-                <div>
-                    <div style="font-size: 1.5rem; font-weight: 700;">7</div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted);">Chapters</div>
-                </div>
-                <div>
-                    <div style="font-size: 1.5rem; font-weight: 700;">449</div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted);">Questions</div>
-                </div>
-                <div>
-                    <div style="font-size: 1.5rem; font-weight: 700;">24</div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted);">Attempted</div>
-                </div>
-                <div>
-                    <div style="font-size: 1.5rem; font-weight: 700;">67%</div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted);">Accuracy</div>
-                </div>
+                <div><div style="font-size: 1.5rem; font-weight: 700;">7</div><div style="font-size: 0.8rem; color: var(--text-muted);">Chapters</div></div>
+                <div><div style="font-size: 1.5rem; font-weight: 700;">449</div><div style="font-size: 0.8rem; color: var(--text-muted);">Questions</div></div>
+                <div><div style="font-size: 1.5rem; font-weight: 700;">67%</div><div style="font-size: 0.8rem; color: var(--text-muted);">Accuracy</div></div>
             </div>
         </div>
-
-        <h3 style="margin-bottom: 1.5rem;">Chapters</h3>
-        
         <div class="chapter-list">
-            <!-- Chap 1 -->
             <div class="chapter-item">
-                <div class="ch-left">
-                    <div class="ch-num">1</div>
-                    <div class="ch-info">
-                        <h4>Basic Patient Care</h4>
-                        <p>Fundamental patient care skills and safety principles</p>
-                    </div>
-                </div>
-                <div class="ch-right">
-                    <div class="ch-stat">
-                        <span style="color: #f97316;">125</span>
-                        <small>remaining</small>
-                    </div>
-                    <button class="btn btn-primary" style="background: #fff; color: #000; height: 40px; width: 80px; justify-content: center;">Start</button>
-                </div>
+                <div class="ch-left"><div class="ch-num">1</div><div class="ch-info"><h4>Basic Patient Care</h4><p>Fundamental patient care skills</p></div></div>
+                <div class="ch-right"><div class="ch-stat"><span style="color: #f97316;">125</span><small>remaining</small></div><button class="btn btn-primary" style="background:#fff; color:#000; width:80px; justify-content:center;">Start</button></div>
             </div>
-
-            <!-- Chap 2 -->
-            <div class="chapter-item" style="border-color: rgba(255,255,255,0.2);">
-                <div class="ch-left">
-                    <div class="ch-num" style="background: var(--primary); color: white;">2</div>
-                    <div class="ch-info">
-                        <div style="display: flex; align-items: center;">
-                            <h4>Vital Signs & Assessment</h4>
-                            <span class="badge-progress">In Progress</span>
-                        </div>
-                        <p style="margin-top: 4px;">Taking vital signs and basic patient assessment techniques</p>
-                        <p style="margin-top: 8px; font-size: 0.85rem; color: var(--text-muted);">
-                            75 total questions • <span style="color: #fff; font-weight: 600;">24 attempted (32%)</span> • <span style="color: #f97316;">51 remaining</span>
-                        </p>
-                        <p style="font-size: 0.8rem; color: var(--text-muted);">Overall accuracy: 67% (16/24 correct)</p>
-                    </div>
-                </div>
-                <div class="ch-right">
-                    <div class="ch-stat">
-                        <span style="color: #f97316;">51</span>
-                        <small>remaining</small>
-                    </div>
-                    <button class="btn btn-primary" style="justify-content: center;" onclick="navigate('quiz')">Continue</button>
-                </div>
-            </div>
-
-            <!-- Chap 3 -->
             <div class="chapter-item">
-                <div class="ch-left">
-                    <div class="ch-num">3</div>
-                    <div class="ch-info">
-                        <h4>Chapter 3</h4>
-                        <p>50 practice questions</p>
-                    </div>
-                </div>
-                <div class="ch-right">
-                    <div class="ch-stat">
-                        <span style="color: #f97316;">50</span>
-                        <small>remaining</small>
-                    </div>
-                    <button class="btn btn-primary" style="background: #fff; color: #000; height: 40px; width: 80px; justify-content: center;">Start</button>
-                </div>
+                <div class="ch-left"><div class="ch-num" style="background:var(--primary); color:white;">2</div><div class="ch-info"><h4>Vital Signs</h4><p>75 questions • <span style="color:#f97316;">51 remaining</span></p></div></div>
+                <div class="ch-right"><div class="ch-stat"><span style="color: #f97316;">51</span><small>remaining</small></div><button class="btn btn-primary" style="justify-content:center;" onclick="navigate('quiz')">Continue</button></div>
             </div>
         </div>
     </section>
 
-    <!-- === VIEW 5: QUIZ === -->
+    <!-- === VIEW 5: QUIZ (UPDATED WITH LOGIC) === -->
     <section id="quiz" class="container hidden" style="height: 100vh; display: flex; align-items: center;">
         <div style="position: fixed; top: 40px; left: 40px;">
             <button class="btn" style="color: var(--text-muted); background: none;" onclick="navigate('chapters')">
@@ -730,35 +658,29 @@
 
             <p class="question-text">How can anxiety affect a patient's vital signs?</p>
 
-            <div class="option-row incorrect" id="opt-1" onclick="selectOption('opt-1', false)">
-                <div class="radio-circle"></div>
-                <span class="opt-letter">A.</span>
+            <div class="option-row" id="opt-1" onclick="checkAnswer('opt-1', false)">
+                <div class="radio-circle"></div><span class="opt-letter">A.</span>
                 <span style="flex-grow: 1;">Decrease heart rate and blood pressure</span>
-                <i class="fa-regular fa-circle-xmark" style="color: var(--error);"></i>
             </div>
 
-            <div class="option-row correct" id="opt-2" onclick="selectOption('opt-2', true)">
-                <div class="radio-circle"></div>
-                <span class="opt-letter">B.</span>
+            <div class="option-row" id="opt-2" onclick="checkAnswer('opt-2', true)">
+                <div class="radio-circle"></div><span class="opt-letter">B.</span>
                 <span style="flex-grow: 1;">Increase heart rate and respiratory rate</span>
-                <i class="fa-regular fa-circle-check" style="color: var(--success);"></i>
             </div>
 
-            <div class="option-row" id="opt-3">
-                <div class="radio-circle"></div>
-                <span class="opt-letter">C.</span>
-                <span>Decrease body temperature</span>
+            <div class="option-row" id="opt-3" onclick="checkAnswer('opt-3', false)">
+                <div class="radio-circle"></div><span class="opt-letter">C.</span>
+                <span style="flex-grow: 1;">Decrease body temperature</span>
             </div>
 
-            <div class="option-row" id="opt-4">
-                <div class="radio-circle"></div>
-                <span class="opt-letter">D.</span>
-                <span>No effect on vital signs</span>
+            <div class="option-row" id="opt-4" onclick="checkAnswer('opt-4', false)">
+                <div class="radio-circle"></div><span class="opt-letter">D.</span>
+                <span style="flex-grow: 1;">No effect on vital signs</span>
             </div>
 
-            <!-- Feedback Box (Shown initially to match screenshot logic) -->
-            <div class="feedback-box" id="feedback" style="display: block;">
-                <h4><i class="fa-solid fa-circle-xmark"></i> Incorrect</h4>
+            <!-- Interactive Feedback Box -->
+            <div class="feedback-box" id="feedback">
+                <h4 id="feedback-title"></h4>
                 <p>Anxiety can cause a physiological stress response, leading to an increase in heart rate, respiratory rate, and sometimes blood pressure.</p>
             </div>
 
@@ -768,9 +690,47 @@
         </div>
     </section>
 
+    <!-- === FOOTER (NEW) === -->
+    <footer class="app-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="#" class="brand" style="margin-bottom: 1rem;"><i class="fa-solid fa-user-nurse"></i> Pass Your License</a>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Empowering the next generation of nurses with the tools they need to succeed.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <a href="#" onclick="navigate('features')">Features</a>
+                    <a href="#" onclick="navigate('pricing')">Pricing</a>
+                    <a href="#" onclick="navigate('testimonials')">Success Stories</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="#">Help Center</a>
+                    <a href="#">Contact Us</a>
+                    <a href="#">Community</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+            <div style="text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 2rem; color: var(--text-muted); font-size: 0.85rem;">
+                &copy; 2024 Pass Your License. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
     <script>
+        // Navigation Logic
         function navigate(viewId) {
-            // Hide all sections
             const sections = ['landing', 'pricing', 'features', 'testimonials', 'dashboard', 'subjects', 'chapters', 'quiz'];
             sections.forEach(id => {
                 const el = document.getElementById(id);
@@ -780,7 +740,6 @@
                 }
             });
 
-            // Show target
             const target = document.getElementById(viewId);
             if(target) {
                 target.classList.remove('hidden');
@@ -789,9 +748,46 @@
             window.scrollTo(0, 0);
         }
 
-        function selectOption(id, isCorrect) {
-            // In a real app, this logic handles selection state
-            // For this demo, the classes are hardcoded to match the screenshot
+        // Quiz Logic
+        let answered = false;
+        function checkAnswer(id, isCorrect) {
+            if(answered) return; // Prevent multiple clicks
+            answered = true;
+
+            const selectedEl = document.getElementById(id);
+            const feedbackBox = document.getElementById('feedback');
+            const feedbackTitle = document.getElementById('feedback-title');
+
+            if(isCorrect) {
+                selectedEl.classList.add('correct');
+                selectedEl.innerHTML += '<i class="fa-regular fa-circle-check" style="color: var(--success); margin-left: auto;"></i>';
+                feedbackBox.style.display = 'block';
+                feedbackBox.style.background = 'rgba(34, 197, 94, 0.1)';
+                feedbackBox.style.borderColor = 'rgba(34, 197, 94, 0.3)';
+                feedbackTitle.innerHTML = '<i class="fa-solid fa-circle-check" style="color: var(--success);"></i> Correct!';
+                feedbackTitle.style.color = 'var(--success)';
+            } else {
+                selectedEl.classList.add('incorrect');
+                selectedEl.innerHTML += '<i class="fa-regular fa-circle-xmark" style="color: var(--error); margin-left: auto;"></i>';
+                feedbackBox.style.display = 'block';
+                feedbackBox.style.background = 'rgba(239, 68, 68, 0.1)';
+                feedbackBox.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+                feedbackTitle.innerHTML = '<i class="fa-solid fa-circle-xmark" style="color: var(--error);"></i> Incorrect';
+                feedbackTitle.style.color = 'var(--error)';
+                
+                // Highlight correct answer too
+                document.getElementById('opt-2').classList.add('correct');
+            }
+        }
+
+        // FAQ Toggle Logic
+        function toggleFaq(el) {
+            el.parentElement.classList.toggle('active');
+        }
+
+        // Simple Mobile Menu (Console log for demo)
+        function toggleMobileMenu() {
+            alert("Mobile menu would open here in full version!");
         }
     </script>
 </body>
